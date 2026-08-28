@@ -147,7 +147,8 @@ func _setup_update_manager() -> void:
 	_about_panel.set_plugin_version(version)
 
 
-## Play a dialog from the current graph starting from the given ID
+## Save temporary playback state to the editor state cache and play a dialog
+## from the current graph starting from the given ID.
 func play_dialog_scene(start_id: String, dialog_path: String = "") -> void:
 	file_manager.save_file()
 	if dialog_path.is_empty(): # Use the current open dialog
@@ -155,8 +156,8 @@ func play_dialog_scene(start_id: String, dialog_path: String = "") -> void:
 		if dialog_path.is_empty():
 			printerr("[Sprouty Dialogs] Cannot play dialog: No dialog file is open.")
 			return
-	SproutyDialogsSettingsManager.set_setting("play_dialog_path", dialog_path)
-	SproutyDialogsSettingsManager.set_setting("play_start_id", start_id)
+	SproutyDialogsEditorStateManager.set_value("window_state", "play_dialog_path", dialog_path)
+	SproutyDialogsEditorStateManager.set_value("window_state", "play_start_id", start_id)
 	Engine.get_singleton("EditorInterface").play_custom_scene(TEST_SCENE_PATH)
 
 

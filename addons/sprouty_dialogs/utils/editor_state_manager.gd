@@ -66,3 +66,4 @@ static func set_value(section: String, key: String, value: Variant) -> void:
 		return
 
 	_editor_state_file.set_value(section, key, value)
+	_editor_state_file.save("res://.godot/sprouty_dialogs.conf")

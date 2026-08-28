@@ -604,7 +604,7 @@ func _on_confirm_closing_editor_action(action) -> void:
 			get_tree().quit()
 
 
-## Save the list of currently opened files to the project settings
+## Save the list of currently opened files to the editor state cache.
 func _save_opened_files() -> void:
 	var opened_files: Array = []
 
@@ -623,14 +623,14 @@ func _save_opened_files() -> void:
 
 	# Save the currently selected file index
 	var current_index = _file_list.get_current_index()
-	SproutyDialogsSettingsManager.set_setting("last_opened_files", opened_files)
-	SproutyDialogsSettingsManager.set_setting("last_selected_file_index", current_index)
+	SproutyDialogsEditorStateManager.set_value("window_state", "last_opened_files", opened_files)
+	SproutyDialogsEditorStateManager.set_value("window_state", "last_selected_file_index", current_index)
 
 
-## Load the list of last opened files from the project settings
+## Load the list of last opened files from the editor state cache.
 func _load_opened_files() -> void:
-	var last_opened_files = SproutyDialogsSettingsManager.get_setting("last_opened_files")
-	var last_selected_index = SproutyDialogsSettingsManager.get_setting("last_selected_file_index")
+	var last_opened_files = SproutyDialogsEditorStateManager.get_value("window_state", "last_opened_files")
+	var last_selected_index = SproutyDialogsEditorStateManager.get_value("window_state", "last_selected_file_index")
 	last_selected_index = last_selected_index if last_selected_index != null else -1
 	
 	if not (last_opened_files is Array and last_opened_files.size() > 0):
@@ -665,6 +665,6 @@ func _on_editor_view_state_changed(view_state: Dictionary) -> void:
 	if file_metadata == null:
 		return
 	if file_metadata.has("cache_node") and file_metadata["cache_node"] != null:
-		var file_list = SproutyDialogsSettingsManager.get_setting("last_opened_files")
+		var file_list = SproutyDialogsEditorStateManager.get_value("window_state", "last_opened_files")
 		file_list[current_index]["view_state"] = view_state
-		SproutyDialogsSettingsManager.set_setting("last_opened_files", file_list)
+		SproutyDialogsEditorStateManager.set_value("window_state", "last_opened_files", file_list)
