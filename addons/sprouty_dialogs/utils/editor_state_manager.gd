@@ -9,6 +9,9 @@ extends RefCounted
 ## It provides methods to get and set editor default values.
 # -----------------------------------------------------------------------------
 
+## Path in which the cache file that stores editor state will be saved.
+const EDITOR_STATE_FILE_PATH := "res//.godot/sprouty_dialogs_cache.cfg"
+
 ## Temporary editor state parameters.
 ## This cache file stores settings which should not be versioned.
 static var _editor_state_file: ConfigFile:
@@ -17,10 +20,9 @@ static var _editor_state_file: ConfigFile:
 			return _editor_state_file
 
 		var file := ConfigFile.new()
-		const PATH := "res://.godot/sprouty_dialogs.conf"
 
-		if FileAccess.file_exists(PATH):
-			var load_result := file.load(PATH)
+		if FileAccess.file_exists(EDITOR_STATE_FILE_PATH):
+			var load_result := file.load(EDITOR_STATE_FILE_PATH)
 			if load_result == OK:
 				_editor_state_file = file
 				return file
@@ -35,7 +37,7 @@ static var _editor_state_file: ConfigFile:
 		file.set_value("window_state", "last_opened_files", [])
 		file.set_value("window_state", "last_selected_file_index", -1)
 
-		file.save(PATH)
+		file.save(EDITOR_STATE_FILE_PATH)
 		_editor_state_file = file
 		return file
 
@@ -66,4 +68,4 @@ static func set_value(section: String, key: String, value: Variant) -> void:
 		return
 
 	_editor_state_file.set_value(section, key, value)
-	_editor_state_file.save("res://.godot/sprouty_dialogs.conf")
+	_editor_state_file.save(EDITOR_STATE_FILE_PATH)
